@@ -5,7 +5,6 @@ import com.flowpowered.math.vector.Vector3d;
 import de.nomexplayz.perplayerworld.PerPlayerWorld;
 
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -21,7 +20,7 @@ import org.spongepowered.api.world.WorldArchetypes;
 
 public class WorldVisitCmd implements CommandExecutor {
     @Override
-    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+    public CommandResult execute(CommandSource src, CommandContext args) {
         if (src instanceof Player) {
             Player plr = (Player) src;
             if (args.<Player>getOne("player").isPresent()) {

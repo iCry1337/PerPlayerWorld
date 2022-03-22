@@ -18,7 +18,13 @@ public class WorldCmd implements CommandExecutor {
             Player player = (Player) src;
             player.sendMessage(Text.of(TextColors.GRAY, "Alle ", TextColors.DARK_GREEN, "Welten ", TextColors.GRAY, "Befehle:"));
             player.sendMessage(Text.of(" "));
-            player.sendMessage(Text.of(TextColors.GRAY, " - ", TextColors.DARK_GREEN, "/welt portal"));
+            player.sendMessage(Text.of(TextColors.GRAY, " - ", TextColors.DARK_GREEN, "/welt home"));
+            player.sendMessage(Text.of(TextColors.GRAY, "Benutze diesen Befehl um dich zu deiner ", TextColors.DARK_GREEN, "Normalen Welt ", TextColors.GRAY, "zu teleportieren."));
+            player.sendMessage(Text.of(" "));
+            player.sendMessage(Text.of(TextColors.GRAY, " - ", TextColors.DARK_GREEN, "/welt void"));
+            player.sendMessage(Text.of(TextColors.GRAY, "Benutze diesen Befehl um dich zu deiner ", TextColors.DARK_GREEN, "Void Welt ", TextColors.GRAY, "zu teleportieren."));
+            player.sendMessage(Text.of(" "));
+            player.sendMessage(Text.of(TextColors.GRAY, " - ", TextColors.DARK_GREEN, "/welt portal [DEAKTIVIERT]"));
             player.sendMessage(Text.of(TextColors.GRAY, "Benutze diesen Befehl um dich zur ", TextColors.DARK_GREEN, "Community Welt ", TextColors.GRAY, "zu teleportieren."));
             player.sendMessage(Text.of(" "));
             player.sendMessage(Text.of(TextColors.GRAY, " - ", TextColors.DARK_GREEN, "/welt community"));

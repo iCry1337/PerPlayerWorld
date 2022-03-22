@@ -150,6 +150,12 @@ public class PerPlayerWorld {
                 .build();
         game.getCommandManager().register(this, worldHome);
 
+        CommandSpec worldVoid = CommandSpec.builder()
+                .description(Text.of("Gehe in deine eigene Void Welt oder erstelle dir deine eigene Void Welt wenn du noch keine eigene Welt hast"))
+                .executor(new WorldVoidCmd())
+                .build();
+        game.getCommandManager().register(this, worldVoid);
+
         CommandSpec worldVisit = CommandSpec.builder()
                 .description(Text.of("Besuche die Welt von einem anderen Spieler"))
                 .executor(new WorldVisitCmd())
@@ -191,6 +197,7 @@ public class PerPlayerWorld {
                 .description(Text.of("Listet alle Weltenbefehle auf"))
                 .executor(new WorldCmd())
                 .child(worldHome, "home")
+                .child(worldVoid, "void")
                 //.child(weltportal, "portal")
                 .child(worldCommunity, "community")
                 .child(worldFarm, "farmwelt")
