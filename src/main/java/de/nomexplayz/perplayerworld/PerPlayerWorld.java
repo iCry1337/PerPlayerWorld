@@ -15,8 +15,6 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Game;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.args.GenericArguments;
-import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.config.DefaultConfig;
 import org.spongepowered.api.data.DataManager;
@@ -144,68 +142,7 @@ public class PerPlayerWorld {
      * Create and register commands.
      */
     public void createAndRegisterCommands() {
-        CommandSpec worldHome = CommandSpec.builder()
-                .description(Text.of("Gehe in deine eigene Welt oder erstelle dir deine eigene Welt wenn du noch keine eigene Welt hast"))
-                .executor(new WorldHomeCmd())
-                .build();
-        game.getCommandManager().register(this, worldHome);
-
-        CommandSpec worldVoid = CommandSpec.builder()
-                .description(Text.of("Gehe in deine eigene Void Welt oder erstelle dir deine eigene Void Welt wenn du noch keine eigene Welt hast"))
-                .executor(new WorldVoidCmd())
-                .build();
-        game.getCommandManager().register(this, worldVoid);
-
-        CommandSpec worldVisit = CommandSpec.builder()
-                .description(Text.of("Besuche die Welt von einem anderen Spieler"))
-                .executor(new WorldVisitCmd())
-                .arguments(GenericArguments.onlyOne(GenericArguments.player(Text.of("player"))))
-                .build();
-        game.getCommandManager().register(this, worldVisit);
-
-        CommandSpec worldSetHome = CommandSpec.builder()
-                .description(Text.of("Setze den Homepunkt deiner Welt neu"))
-                .executor(new WorldSetHomeCmd())
-                .build();
-        game.getCommandManager().register(this, worldSetHome);
-
-        //CommandSpec weltportal = CommandSpec.builder()
-        //        .description(Text.of("weltportal"))
-        //        .executor(new WeltPortalCMD())
-        //        .build();
-        //game.getCommandManager().register(this, weltportal, "weltportal", "weltportal");
-
-        CommandSpec worldCommunity = CommandSpec.builder()
-                .description(Text.of("Teleportiert dich in die Community Welt"))
-                .executor(new WorldCommunityCmd())
-                .build();
-        game.getCommandManager().register(this, worldCommunity);
-
-        CommandSpec worldFarm = CommandSpec.builder()
-                .description(Text.of("Teleportiert dich in die Farmwelt"))
-                .executor(new WorldFarmCmd())
-                .build();
-        game.getCommandManager().register(this, worldFarm);
-
-        CommandSpec worldInfo = CommandSpec.builder()
-                .description(Text.of("Zeigt Informationen zu deiner Welt an"))
-                .executor(new WorldInfoCmd())
-                .build();
-        game.getCommandManager().register(this, worldInfo);
-
-        CommandSpec worldCommandSpec = CommandSpec.builder()
-                .description(Text.of("Listet alle Weltenbefehle auf"))
-                .executor(new WorldCmd())
-                .child(worldHome, "home")
-                .child(worldVoid, "void")
-                //.child(weltportal, "portal")
-                .child(worldCommunity, "community")
-                .child(worldFarm, "farmwelt")
-                .child(worldInfo, "info")
-                .child(worldVisit, "besuchen")
-                .child(worldSetHome, "sethome")
-                .build();
-        game.getCommandManager().register(this, worldCommandSpec, "welt");
+        Sponge.getCommandManager().register(this, new CommandManager().worldCommandSpec, "world");
     }
 
     /**
