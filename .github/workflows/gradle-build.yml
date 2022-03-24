@@ -18,6 +18,8 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: 8
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
       - name: Cache Gradle packages
         uses: actions/cache@v1
         with:
