@@ -3,9 +3,8 @@ package de.nomexplayz.perplayerworld;
 import com.google.inject.Inject;
 
 import de.nomexplayz.perplayerworld.commands.*;
-import de.nomexplayz.perplayerworld.database.SqlManager;
-
 import de.nomexplayz.perplayerworld.listener.*;
+
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
@@ -21,12 +20,14 @@ import org.spongepowered.api.data.DataManager;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Order;
+import org.spongepowered.api.event.block.TickBlockEvent;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.*;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.WorldArchetype;
@@ -40,9 +41,6 @@ public class PerPlayerWorld {
 
     @Inject
     private Logger logger;
-
-    @Inject
-    private PluginContainer pluginContainer;
 
     @Inject
     @ConfigDir(sharedRoot = false)
@@ -59,27 +57,17 @@ public class PerPlayerWorld {
     @Inject
     private Game game;
 
+    @Inject
+    private PluginContainer pluginContainer;
+
+    private UserStorageService userStorageService;
+
     private ConfigurationNode config;
-
-    private SqlManager sqlManager;
-
-    // Database Variables
-    private boolean databaseEnabled = false;
-    private String databaseUrl;
-    private String databaseUser;
-    private String databasePassword;
 
     @Listener
     public void preInit(GamePreInitializationEvent event) {
         loadConfig();
         setFeaturesEnabledStatus();
-
-        if (databaseEnabled) {
-            databaseUrl = config.getNode("database", "url").getString();
-            databaseUser = config.getNode("database", "username").getString();
-            databasePassword = config.getNode("database", "password").getString();
-            sqlManager = new SqlManager(this, logger);
-        }
     }
 
     @Listener
@@ -90,6 +78,7 @@ public class PerPlayerWorld {
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
+        userStorageService = game.getServiceManager().provideUnchecked(UserStorageService.class);
         logger.info("PerPlayerWorld Started");
     }
 
@@ -153,20 +142,22 @@ public class PerPlayerWorld {
 
         eventManager.registerListeners(this, new DeathListener());
         eventManager.registerListeners(this, new RespawnListener());
+        eventManager.registerListeners(this, new QuitListener());
     }
 
     private void setFeaturesEnabledStatus() {
-        databaseEnabled = config.getNode("database", "enable").getBoolean(false);
+
     }
 
     public void createAndLoadWorld(String folderName, WorldArchetype settings, Player player) {
 
         try {
             final WorldProperties properties = Sponge.getServer().createWorldProperties(folderName, settings);
+            Sponge.getServer().createWorldProperties(folderName, settings);
             Sponge.getServer().loadWorld(properties);
         } catch (IOException ex) {
             this.logger.error("[PPW] Failed to create world data for [" + folderName + "]!", ex);
-            player.sendMessage(Text.of(TextColors.GRAY, "[PPW] The requested world : ", TextColors.YELLOW, folderName, TextColors.GRAY," can\'t be loaded!"));
+            player.sendMessage(Text.of(TextColors.GRAY, "[PPW] The requested world : ", TextColors.YELLOW, folderName, TextColors.GRAY," can't be loaded!"));
         }
     }
 
@@ -186,23 +177,9 @@ public class PerPlayerWorld {
         return pluginContainer;
     }
 
-    public boolean isDatabaseEnabled() {
-        return databaseEnabled;
+    public UserStorageService getUserStorageService() {
+        return userStorageService;
     }
 
-    public String getDatabaseUrl() {
-        return databaseUrl;
-    }
 
-    public String getDatabaseUser() {
-        return databaseUser;
-    }
-
-    public String getDatabasePassword() {
-        return databasePassword;
-    }
-
-    public SqlManager getSqlManager() {
-        return sqlManager;
-    }
 }

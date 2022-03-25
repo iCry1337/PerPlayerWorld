@@ -15,6 +15,7 @@ import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 import org.spongepowered.api.world.WorldArchetypes;
+import org.spongepowered.api.world.storage.WorldStorage;
 
 public class WorldHomeCmd implements CommandExecutor {
     @Override
